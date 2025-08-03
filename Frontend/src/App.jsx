@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Edit2, Trash2, PlusCircle } from 'lucide-react';
+import { CheckCircle, Edit2, Trash2, PlusCircle } from 'lucide-react';
 import './App.css';
 import React from 'react';
 
@@ -7,21 +7,19 @@ function App() {
   const [task, setTask] = useState('');
   const [todos, setTodos] = useState([]);
 
-  const API_URL = 'https://to-do-app-mern-stack-production.up.railway.app/todos';
-
   useEffect(() => {
     loadTodos();
   }, []);
 
   const loadTodos = async () => {
-    const res = await fetch(API_URL);
+    const res = await fetch('http://localhost:4000/todos');
     const data = await res.json();
     setTodos(data);
   };
 
   const addTodo = async () => {
     if (task.trim() === '') return alert('Task cannot be empty');
-    await fetch(API_URL, {
+    await fetch('http://localhost:4000/todos', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ task })
@@ -31,12 +29,12 @@ function App() {
   };
 
   const deleteTodo = async (id) => {
-    await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+    await fetch(`http://localhost:4000/todos/${id}`, { method: 'DELETE' });
     loadTodos();
   };
 
   const toggleComplete = async (id, completed) => {
-    await fetch(`${API_URL}/${id}`, {
+    await fetch(`http://localhost:4000/todos/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ completed })
@@ -47,7 +45,7 @@ function App() {
   const editTodo = async (id, currentTask) => {
     const newTask = prompt('Edit Task:', currentTask);
     if (newTask && newTask.trim() !== '') {
-      await fetch(`${API_URL}/${id}`, {
+      await fetch(`http://localhost:4000/todos/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ task: newTask.trim() })
@@ -55,6 +53,7 @@ function App() {
       loadTodos();
     }
   };
+
   return (
     <>
       <div className="app-container">
@@ -72,7 +71,7 @@ function App() {
             </button>
           </div>
           <ul className="todo-list">
-     {todos.map((todo, index) => (
+{todos.map((todo, index) => (
   <li key={todo.id || index} className="todo-item">             
      <div className="todo-left">
                   <div
