@@ -8,10 +8,10 @@ app.use(cors());
 
 app.use(express.json());
 
-mongoose.connect('mongodb://localhost:27017/todoApp', {
+mongoose.connect('mongodb+srv://iqrazartasha33:pRdwJshRjz2cKA8I@cluster0.mjq65jy.mongodb.net/todoApp?retryWrites=true&w=majority&appName=Cluster0', {
   useNewUrlParser: true,
   useUnifiedTopology: true
-}).then(() => console.log('Connected to MongoDB'))
+}).then(() => console.log('Connected to MongoDB Atlas'))
   .catch(err => console.error('MongoDB connection error:', err));
 
 app.get('/todos', async (req, res) => {
@@ -96,6 +96,7 @@ app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
 
-app.listen(4000, () => {
-  console.log('Server is running on http://localhost:4000');
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
